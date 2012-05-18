@@ -1,7 +1,8 @@
 L-Systems.JS
 ============
 
-A full, 3D L-Systems implementation in JavaScript
+A full, 3D L-Systems implementation in JavaScript. Generates trees by
+production rules and draws by converting to cartesian coordinates.
 
 Usage
 -----
@@ -10,6 +11,8 @@ Usage
 var lsys = new LSystem('F', { 'F' : 'F-F+FF' });
 var tree = lsys.iterate(2);
 console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
+var coords = lsys.draw(Math.PI / 2);  // draw tree with alpha as 90 degrees
+console.log(coords);  // [[0,0,0], [0,1,0], [1,1,0], ...
 ```
 
 Definition
@@ -23,9 +26,9 @@ assumed to be all characters with a production rule mapping.
 Syntax
 ------
 
- - `F`: move one unit vector forward
- - `+` / `-`: turn right / left by angle `alpha`
- - `&` / `^`: pitch up / down by angle `alpha`
- - `<` / `>`: roll right / left by angle `alpha`
+ - `F`: draw and move one unit vector forward
+ - `+`/`-`: turn right / left
+ - `&`/`^`: pitch up / down
+ - `<`/`>`: roll right / left
  - `|`: reverse vector direction
- - `[` / `]`: push / pop current tree state
+ - `[`/`]`: push / pop current tree state
