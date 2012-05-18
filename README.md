@@ -19,7 +19,7 @@ Definition
 ------
 
 An L-system is a formal grammar defined as an initial axiom string, and a set
-of production rules. In te aforementioned example, `F` is the initial axiom,
+of production rules. In the aforementioned example, `F` is the initial axiom,
 and only one production rule exists: `F -> F-F+FF`. The grammar alphabet is
 assumed to be all characters with a production rule mapping.
 
