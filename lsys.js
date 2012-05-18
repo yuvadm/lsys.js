@@ -13,8 +13,9 @@ function LSystem(axiom, rules) {
   };
 
   this.draw = function(alpha) {
-    if (alpha === undefined)
+    if (!alpha) {
       alpha = 90 * (Math.PI / 180);
+    }
 
     var coords = [];
     var stack = [];
