@@ -1,10 +1,3 @@
-// L-System as defined in
-// http://en.wikipedia.org/wiki/L-system
-
-// Example usage:
-// lsys = LSystem('F', { 'F' : 'F-F+FF' });
-// tree = lsys.iterate(2)
-
 function LSystem(axiom, rules) {
   this.axiom = axiom;
   this.rules = rules;
