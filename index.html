@@ -32,10 +32,19 @@
           <div class="span12">
             <p><b>L-Systems (short for Lindenmayer systems) are instances of a formal grammar that are used to model growth processes of plant deveopment. L-Systems can be used to generate realistic, natural-looking organisms in simulated environments.</b></p>
 
-            <p>An L-System consists of an initial axiom string, for example: <code>F</code>, and a set of production rules, for example: <code>F -> F-F+FF</code>. The rules are used to iterativey expand the string to a larger one. In our example, two iterations on the string will yield the string <code>F-F+FF-F-F+FF+F-F+FFF-F+FF</code>. L-Systems also include a mechanism that converts the output string into a geometrical representation. The syntax includes a unit vector step forward that draws a line - <code>F</code>, left and right turns on all three axises - <code>+</code>,<code>-</code>,<code>&</code>,<code>^</code>,<code>&lt;</code>,<code>&gt;</code>, a vector direction flip - <code>|</code>, and state push and pop functions - <code>[</code>, <code>]</code> that enable branch creation. L-Systems.JS can generate the proper cartesian coordinates for processing in the front-end of your choice (WebGL, canvas or SVG).
+            <p>An L-System consists of an initial axiom string, for example: <code>F</code>, and a set of production rules, for example: <code>F -> F-F+FF</code>. The rules are used to iterativey expand the string to a larger one. In our example, two iterations on the string will yield the string <code>F-F+FF-F-F+FF+F-F+FFF-F+FF</code>. L-Systems also include a mechanism that converts the output string into a geometrical representation. The syntax includes:</p>
+
+            <ul>
+              <li><code>F</code> - a unit vector step forward that draws a line</li>
+              <li><code>+</code>,<code>-</code>,<code>&</code>,<code>^</code>,<code>&lt;</code>,<code>&gt;</code> - left and right turns on all three axises</li>
+              <li><code>|</code> - a vector direction flip</li>
+              <li><code>[</code>, <code>]</code> - state push and pop functions that enable branch creation.
+            </ul>
+
+            <p>Proper cartesian coordinates can then be generated from the result string, for processing in the front-end of your choice (WebGL, canvas or SVG).
             </p>
 
-            <p>L-Systems.JS is created and maintained by <a href="http://y3xz.com">Yuval Adam</a>.</p>
+            <p>L-Systems.JS was created by <a href="http://y3xz.com">Yuval Adam</a>.</p>
           </div>
         </div>
 
@@ -53,11 +62,13 @@ console.log(coords);  // [[[0,0,0], [0,1,0], [1,1,0], ... ]]</pre>
             <p>These coordinates can now be plotted by any front-end. For example, using THREE.js:</p>
             <pre class="prettyprint">
 for (var i=0; i&lt;coords.length; i++) {
-  var branch = coords[i];
+  var branch = [];
+  for (var j=0; j&lt;coords[i].length; j++) {
+    branch.push(new THREE.Vector3(coords[i][j][0], coords[i][j][1], coords[i][j][2]));
+  }
   var geometry = new THREE.Shape(branch).createPointsGeometry();
-  var material = new THREE.LineBasicMaterial({color: 0x111122, linewidth: 2});
-  var line = new THREE.Line(geometry, material);
-  scene.add(line);
+  console.log(geometry);
+  draw_geometry(geometry);
 }</pre>
           </div>
         </div>
@@ -89,6 +100,7 @@ for (var i=0; i&lt;coords.length; i++) {
 
       var container;
       var scene, camera, renderer;
+      var lsys_tree;
 
       var mouseX = 0, mouseY = 0;
       var windowHalfX = WIDTH / 2;
@@ -96,8 +108,8 @@ for (var i=0; i&lt;coords.length; i++) {
 
       init();
       draw_axes();
-      //draw_cube();
-      var lsys = new LSystem('F', { 'F': 'F-F+FF' });
+      draw_cube();
+      var lsys = new LSystem('F', { 'F': 'F+F-F' });
       var tree = lsys.iterate(4);
       var coords = lsys.draw(Math.PI / 2);
       draw_lsys(coords);
@@ -107,7 +119,8 @@ for (var i=0; i&lt;coords.length; i++) {
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(20, WIDTH / HEIGHT, 1, 10000);
-        camera.position.z = 10;
+        camera.position.y = 100;
+        camera.position.z = 100;
         scene.add(camera);
 
         light = new THREE.DirectionalLight( 0xffffff );
@@ -178,20 +191,21 @@ for (var i=0; i&lt;coords.length; i++) {
       }
 
       function draw_lsys(coords) {
+        lsys_tree = new THREE.Object3D();
         for (var i=0; i<coords.length; i++) {
-          var geometry = new THREE.Shape(coords[i]).createPointsGeometry();
-          console.log(geometry);
-          draw_geometry(geometry);
+          var branch = [];
+          for (var j=0; j<coords[i].length; j++) {
+            branch.push(new THREE.Vector3(coords[i][j][0], coords[i][j][1], coords[i][j][2]));
+          }
+          var geometry = new THREE.Shape(branch).createPointsGeometry();
+          var material = new THREE.LineBasicMaterial({
+            color : 0x111122,
+            linewidth : 2
+          });
+          var line = new THREE.Line(geometry, material);
+          lsys_tree.add(line);
         }
-      }
-
-      function draw_geometry(geometry) {
-        var material = new THREE.LineBasicMaterial({
-          color : 0x111122,
-          linewidth : 20
-        });
-        var line = new THREE.Line(geometry, material);
-        scene.add(line);
+        scene.add(lsys_tree);
       }
 
       function animate() {
@@ -200,8 +214,7 @@ for (var i=0; i&lt;coords.length; i++) {
       }
 
       function render() {
-        camera.position.x += (mouseX - camera.position.x) * 0.5;
-        //camera.position.z += (-mouseY - camera.position.z) * 0.5;
+        lsys_tree.rotation.y = mouseX % (20 * Math.PI) / 10;
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
       }
