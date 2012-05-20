@@ -7,12 +7,16 @@
     <script src="lsys.js"></script>
     <link rel="stylesheet" href="bootstrap.css" type="text/css"/>
     <link rel="stylesheet" href="style.css" type="text/css"/>
+
+    <link href="prettify.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="prettify.js"></script>
   </head>
 
-  <body>
+  <body onload="prettyPrint()">
 
     <div class="page">
       <div class="container">
+
         <div class="hero-unit">
           <h1>L-Systems.JS</h1>
           <p>Explore the power of L-Systems</p>
@@ -21,14 +25,44 @@
             <a class="btn btn-primary btn-large" href="lsys.js">Download L-Systems.JS</a>
           </p>
         </div>
-        <div id="3dcontainer"></div>
+
+        <h2>Usage</h2>
+        <hr>
+        <div class="row">
+          <div class="span12">
+            <pre class="prettyprint">
+  var lsys = new LSystem('F', { 'F': 'F-F+FF' });
+  var tree = lsys.iterate(2);
+  console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
+  var coords = lsys.draw(Math.PI / 2);
+  console.log(coords);  // [[0,0,0], [0,1,0], [1,1,0], ...</pre>
+          </div>
+        </div>
+
+        <h2>Playground</h2>
+        <hr>
+        <div class="row">
+          <div class="span3">
+            <ul class="nav nav-list"s>
+              <li class="nav-header">Classic Trees</li>
+              <li><a href="#">Tree 1</a></li>
+              <li><a href="#">Tree 2</a></li>
+              <li><a href="#">Tree 3</a></li>
+            </ul>
+          </div>
+          <div class="span9">
+            <div id="render-container"></div>
+          </div>
+        </div>
+
+        <h2>Other</h2>
       </div>
     </div>
 
     <script>
 
-      var WIDTH = 800; //window.innerWidth;
-      var HEIGHT = 600; //window.innerHeight;
+      var WIDTH = 500; //window.innerWidth;
+      var HEIGHT = 300; //window.innerHeight;
 
       var container;
       var scene, camera, renderer;
@@ -56,7 +90,7 @@
         renderer = new THREE.WebGLRenderer( { antialias: true } );
         renderer.setSize(WIDTH, HEIGHT);
         
-        container = document.getElementById('3dcontainer');
+        container = document.getElementById('render-container');
         container.appendChild(renderer.domElement);
 
         document.addEventListener('mousemove', onDocumentMouseMove, false);
