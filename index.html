@@ -26,16 +26,37 @@
           </p>
         </div>
 
+        <h2>About</h2>
+        <hr>
+        <div class="row">
+          <div class="span12">
+            <p><b>L-Systems (short for Lindenmayer systems) are instances of a formal grammar that are used to model growth processes of plant deveopment. L-Systems can be used to generate realistic, natural-looking organisms in simulated environments.</b></p>
+
+            <p>An L-System consists of an initial axiom string, for example: <code>F</code>, and a set of production rules, for example: <code>F -> F-F+FF</code>. The rules are used to iterativey expand the string to a larger one. In our example, two iterations on the string will yield the string <code>F-F+FF-F-F+FF+F-F+FFF-F+FF</code>. L-Systems also include a mechanism that converts the output string into a geometrical representation. The syntax includes a unit vector step forward that draws a line - <code>F</code>, left and right turns on all three axises - <code>+</code>,<code>-</code>,<code>&</code>,<code>^</code>,<code>&lt;</code>,<code>&gt;</code>, a vector direction flip - <code>|</code>, and state push and pop functions - <code>[</code>, <code>]</code> that enable branch creation. L-Systems.JS can generate the proper cartesian coordinates for processing in the front-end of your choice (WebGL, canvas or SVG).
+            </p> 
+          </div>
+        </div>
+
         <h2>Usage</h2>
         <hr>
         <div class="row">
           <div class="span12">
+            <p>The canonical usage would be to create the L-System itself by defining the axiom string and the production rules, running the iteration, and generating the respective cartesian coordinates.</p>
             <pre class="prettyprint">
-  var lsys = new LSystem('F', { 'F': 'F-F+FF' });
-  var tree = lsys.iterate(2);
-  console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
-  var coords = lsys.draw(Math.PI / 2);
-  console.log(coords);  // [[0,0,0], [0,1,0], [1,1,0], ...</pre>
+var lsys = new LSystem('F', { 'F': 'F-F+FF' });
+var tree = lsys.iterate(2);
+console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
+var coords = lsys.draw(Math.PI / 2);
+console.log(coords);  // [[[0,0,0], [0,1,0], [1,1,0], ... ]]</pre>
+            <p>These coordinates can now be plotted by any front-end. For example, using THREE.js:</p>
+            <pre class="prettyprint">
+for (var i=0; i&lt;coords.length; i++) {
+  var branch = coords[i];
+  var geometry = new THREE.Shape(branch).createPointsGeometry();
+  var material = new THREE.LineBasicMaterial({color: 0x111122, linewidth: 2});
+  var line = new THREE.Line(geometry, material);
+  scene.add(line);
+}</pre>
           </div>
         </div>
 
@@ -73,14 +94,18 @@
 
       init();
       draw_axes();
-      draw_cube();
+      //draw_cube();
+      var lsys = new LSystem('F', { 'F': 'F-F+FF' });
+      var tree = lsys.iterate(4);
+      var coords = lsys.draw(Math.PI / 2);
+      draw_lsys(coords);
       animate();
 
       function init() {
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(20, WIDTH / HEIGHT, 1, 10000);
-        camera.position.z = 180;
+        camera.position.z = 10;
         scene.add(camera);
 
         light = new THREE.DirectionalLight( 0xffffff );
@@ -150,14 +175,31 @@
         scene.add(cube);
       }
 
+      function draw_lsys(coords) {
+        for (var i=0; i<coords.length; i++) {
+          var geometry = new THREE.Shape(coords[i]).createPointsGeometry();
+          console.log(geometry);
+          draw_geometry(geometry);
+        }
+      }
+
+      function draw_geometry(geometry) {
+        var material = new THREE.LineBasicMaterial({
+          color : 0x111122,
+          linewidth : 20
+        });
+        var line = new THREE.Line(geometry, material);
+        scene.add(line);
+      }
+
       function animate() {
         requestAnimationFrame(animate);
         render();
       }
 
       function render() {
-        camera.position.x += (mouseX - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY - camera.position.y) * 0.05;
+        camera.position.x += (mouseX - camera.position.x) * 0.5;
+        //camera.position.z += (-mouseY - camera.position.z) * 0.5;
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
       }
