@@ -80,6 +80,7 @@ for (var i=0; i&lt;coords.length; i++) {
             <ul class="nav nav-list">
               <li class="nav-header">2D Basics</li>
               <li><a href="#" class="lsys-link" data-lsys="koch_curve" data-dim="2D">Koch Curve</a></li>
+              <li><a href="#" class="lsys-link" data-lsys="sierpinski" data-dim="2D">Sierpinski Triangle</a></li>
             </ul>
           </div>
           <div class="span9">
@@ -90,14 +91,12 @@ for (var i=0; i&lt;coords.length; i++) {
         <h2>Other</h2>
       </div>
     </div>
-    
-    <script>
-      var lsys_dir = {
-        'koch_curve' : new LSystem('F', {'F': 'F+F-F-F+F'})
-      }
-    </script>
 
     <script>
+      var lsys_dir = {
+        'koch_curve': new LSystem('F', {'F': 'F+F-F-F+F'}).iterate(3).draw(Math.PI/2),
+        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}).iterate(3).draw(Math.PI/3)
+      }
 
       var WIDTH = 500; //window.innerWidth;
       var HEIGHT = 300; //window.innerHeight;
@@ -112,9 +111,6 @@ for (var i=0; i&lt;coords.length; i++) {
 
       init();
       draw_axes();
-      var lsys = new LSystem('F', { 'F': 'F+F-F-F+F' }).iterate(3);
-      var coords = lsys.draw(Math.PI / 2);
-      draw_lsys(coords);
       animate();
 
       function init() {
@@ -201,7 +197,9 @@ for (var i=0; i&lt;coords.length; i++) {
       }
 
       function render() {
-        lsys_tree.rotation.y = mouseX % (20 * Math.PI) / 10;
+        if (lsys_tree) {
+          lsys_tree.rotation.y = mouseX % (20 * Math.PI) / 10;
+        }
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
       }
@@ -209,6 +207,10 @@ for (var i=0; i&lt;coords.length; i++) {
       $('a.lsys-link').click(function(e) {
         var dim = $(this).attr('data-dim');
         var lsys = $(this).attr('data-lsys');
+        if (lsys_tree) {
+          scene.remove(lsys_tree);
+        }
+        draw_lsys(lsys_dir[lsys]);
         return false;
       });
 
