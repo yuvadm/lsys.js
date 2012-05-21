@@ -9,6 +9,10 @@ function LSystem(axiom, rules) {
         return rules[c] || c;
       });
     }
+    return this;
+  };
+
+  this.print = function() {
     return this.tree;
   };
 
@@ -125,7 +129,7 @@ function LSystem(axiom, rules) {
 
   this.reset = function() {
     this.tree = axiom;
-    return this.tree;
+    return this;
   };
 
   this.debug = function() {

@@ -8,8 +8,8 @@ Usage
 -----
 
 ```js
-var lsys = new LSystem('F', { 'F' : 'F-F+FF' });
-var tree = lsys.iterate(2);
+var lsys = new LSystem('F', { 'F' : 'F-F+FF' }).iterate(2);
+var tree = lsys.print();
 console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
 var coords = lsys.draw(Math.PI / 2);  // draw tree with alpha as 90 degrees
 console.log(coords);  // [[0,0,0], [0,1,0], [1,1,0], ...
