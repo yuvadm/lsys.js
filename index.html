@@ -77,11 +77,9 @@ for (var i=0; i&lt;coords.length; i++) {
         <hr>
         <div class="row">
           <div class="span3">
-            <ul class="nav nav-list"s>
-              <li class="nav-header">Classic Trees</li>
-              <li><a href="#">Tree 1</a></li>
-              <li><a href="#">Tree 2</a></li>
-              <li><a href="#">Tree 3</a></li>
+            <ul class="nav nav-list">
+              <li class="nav-header">2D Basics</li>
+              <li><a href="#" class="lsys-link" data-lsys="koch_curve" data-dim="2D">Koch Curve</a></li>
             </ul>
           </div>
           <div class="span9">
@@ -92,6 +90,12 @@ for (var i=0; i&lt;coords.length; i++) {
         <h2>Other</h2>
       </div>
     </div>
+    
+    <script>
+      var lsys_dir = {
+        'koch_curve' : new LSystem('F', {'F': 'F+F-F-F+F'})
+      }
+    </script>
 
     <script>
 
@@ -108,9 +112,8 @@ for (var i=0; i&lt;coords.length; i++) {
 
       init();
       draw_axes();
-      draw_cube();
-      var lsys = new LSystem('F', { 'F': 'F+F-F' });
-      var tree = lsys.iterate(4);
+      var lsys = new LSystem('F', { 'F': 'F+F-F-F+F' });
+      var tree = lsys.iterate(3);
       var coords = lsys.draw(Math.PI / 2);
       draw_lsys(coords);
       animate();
@@ -175,21 +178,6 @@ for (var i=0; i&lt;coords.length; i++) {
         scene.add(axis_line[2]);
       }
 
-      function draw_cube() {
-        var materials = [];
-        for (var i=0; i<6; i++) {
-          materials.push(new THREE.MeshBasicMaterial({
-            color : Math.random() * 0xffffff
-          }));
-        }
-
-        var cube = new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5, 1, 1, 1, materials), new THREE.MeshFaceMaterial());
-        cube.position.x = 2.5;
-        cube.position.y = 2.5;
-        cube.position.z = 2.5;
-        scene.add(cube);
-      }
-
       function draw_lsys(coords) {
         lsys_tree = new THREE.Object3D();
         for (var i=0; i<coords.length; i++) {
@@ -218,6 +206,12 @@ for (var i=0; i&lt;coords.length; i++) {
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
       }
+
+      $('a.lsys-link').click(function(e) {
+        var dim = $(this).attr('data-dim');
+        var lsys = $(this).attr('data-lsys');
+        return false;
+      });
 
     </script>
   </body>
