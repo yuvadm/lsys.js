@@ -81,6 +81,7 @@ for (var i=0; i&lt;coords.length; i++) {
               <li class="nav-header">2D Basics</li>
               <li><a href="#" class="lsys-link" data-lsys="koch_curve" data-dim="2D">Koch Curve</a></li>
               <li><a href="#" class="lsys-link" data-lsys="sierpinski" data-dim="2D">Sierpinski Triangle</a></li>
+              <li><a href="#" class="lsys-link" data-lsys="dragon_curve" data-dim="2D">Dragon Curve</a></li>
             </ul>
           </div>
           <div class="span9">
@@ -95,7 +96,8 @@ for (var i=0; i&lt;coords.length; i++) {
     <script>
       var lsys_dir = {
         'koch_curve': new LSystem('F', {'F': 'F+F-F-F+F'}).iterate(3).draw(Math.PI/2),
-        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B']).iterate(4).draw(Math.PI/3)
+        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B']).iterate(4).draw(Math.PI/3),
+        'dragon_curve': new LSystem('FX', {'X': 'X+YF', 'Y': 'FX-Y'}).iterate(10).draw(Math.PI/2)
       }
 
       var WIDTH = 500; //window.innerWidth;
