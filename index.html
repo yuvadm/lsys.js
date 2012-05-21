@@ -95,7 +95,7 @@ for (var i=0; i&lt;coords.length; i++) {
     <script>
       var lsys_dir = {
         'koch_curve': new LSystem('F', {'F': 'F+F-F-F+F'}).iterate(3).draw(Math.PI/2),
-        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}).iterate(3).draw(Math.PI/3)
+        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B']).iterate(4).draw(Math.PI/3)
       }
 
       var WIDTH = 500; //window.innerWidth;
