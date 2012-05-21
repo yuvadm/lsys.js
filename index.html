@@ -54,8 +54,8 @@
           <div class="span12">
             <p>The canonical usage would be to create the L-System itself by defining the axiom string and the production rules, running the iteration, and generating the respective cartesian coordinates.</p>
             <pre class="prettyprint">
-var lsys = new LSystem('F', { 'F': 'F-F+FF' });
-var tree = lsys.iterate(2);
+var lsys = new LSystem('F', { 'F': 'F-F+FF' }).iterate(2);
+var tree = lsys.print();
 console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
 var coords = lsys.draw(Math.PI / 2);
 console.log(coords);  // [[[0,0,0], [0,1,0], [1,1,0], ... ]]</pre>
@@ -112,8 +112,7 @@ for (var i=0; i&lt;coords.length; i++) {
 
       init();
       draw_axes();
-      var lsys = new LSystem('F', { 'F': 'F+F-F-F+F' });
-      var tree = lsys.iterate(3);
+      var lsys = new LSystem('F', { 'F': 'F+F-F-F+F' }).iterate(3);
       var coords = lsys.draw(Math.PI / 2);
       draw_lsys(coords);
       animate();
