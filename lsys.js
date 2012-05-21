@@ -1,7 +1,8 @@
-function LSystem(axiom, rules) {
+function LSystem(axiom, rules, draw_constants) {
   this.axiom = axiom;
   this.rules = rules;
   this.tree = axiom;
+  this.draw_constants = draw_constants || [];
 
   this.iterate = function(n) {
     for (var i=0; i<n; i++) {
@@ -32,6 +33,10 @@ function LSystem(axiom, rules) {
 
     for (var i=0; i<this.tree.length; i++) {
       var c = this.tree.charAt(i);
+
+      if (this.draw_constants.indexOf(c) != -1) {
+        c = 'F';
+      }
       switch(c) {
         case '+':
           U += alpha;
