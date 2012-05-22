@@ -75,7 +75,9 @@ function LSystem(axiom, rules, draw_constants) {
           geometry = [[x,y,z]];
           break;
         case ']':
-          coords.push(geometry);
+          if (geometry.length > 1) {
+            coords.push(geometry);
+          }
           geometry = stack.pop();
           U = stack.pop();
           L = stack.pop();
