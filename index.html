@@ -105,10 +105,10 @@ for (var i=0; i&lt;coords.length; i++) {
 
     <script>
       var lsys_dir = {
-        'koch_curve': new LSystem('F', {'F': 'F+F-F-F+F'}).iterate(3).draw(Math.PI/2),
-        'sierpinski': new LSystem('A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B']).iterate(4).draw(Math.PI/3),
-        'dragon_curve': new LSystem('FX', {'X': 'X+YF', 'Y': 'FX-Y'}).iterate(10).draw(Math.PI/2),
-        'fractal_plant': new LSystem('X', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}).iterate(6).draw(25*(Math.PI/180))
+        'koch_curve': ['F', {'F': 'F+F-F-F+F'}, [], 3, Math.PI/2],
+        'sierpinski': ['A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B'], 4, Math.PI/3],
+        'dragon_curve': ['FX', {'X': 'X+YF', 'Y': 'FX-Y'}, [], 10, Math.PI/2],
+        'fractal_plant': ['X', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, [], 6, Math.PI*25/180]
       }
 
       var WIDTH = 500; //window.innerWidth;
@@ -223,7 +223,9 @@ for (var i=0; i&lt;coords.length; i++) {
         if (lsys_tree) {
           scene.remove(lsys_tree);
         }
-        draw_lsys(lsys_dir[lsys]);
+        var d = lsys_dir[lsys];
+        var new_lsys = new LSystem(d[0], d[1], d[2]).iterate(d[3]).draw(d[4]);
+        draw_lsys(new_lsys);
         return false;
       });
 
