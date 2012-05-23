@@ -90,10 +90,11 @@ for (var i=0; i&lt;coords.length; i++) {
             <div id="render-container"></div>
             <br/>
             <form id="custom-form" class="well form-inline">
-              <input id="custom-axiom" type="text" class="input-small" placeholder="Axiom">
-              <input id="custom-rules" type="text" class="input-large" placeholder="Rules">
-              <input id="custom-iterations" type="text" class="input-small" placeholder="Iterations">
-              <input id="custom-angle" type="text" class="input-small" placeholder="Angle">
+              <input id="custom-axiom" type="text" class="span1" placeholder="Axiom">
+              <input id="custom-rules" type="text" class="span3" placeholder="Rules">
+              <input id="custom-draw-consts" type="text" class="span1" placeholder="Draw Constants">
+              <input id="custom-iterations" type="text" class="span1" placeholder="Iterations">
+              <input id="custom-angle" type="text" class="span1" placeholder="Angle">
               <button id="custom-draw" type="submit" class="btn">Draw</button>
             </form>
           </div>
@@ -133,16 +134,16 @@ for (var i=0; i&lt;coords.length; i++) {
         camera.position.z = 50;
         scene.add(camera);
 
-        controls = new THREE.TrackballControls(camera);
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.panSpeed = 0.8;
-        controls.noZoom = false;
-        controls.noPan = false;
-        controls.staticMoving = true;
-        controls.dynamicDampingFactor = 0.3;
-        controls.keys = [65, 83, 68];
-        controls.addEventListener('change', render);
+        // controls = new THREE.TrackballControls(camera);
+        // controls.rotateSpeed = 1.0;
+        // controls.zoomSpeed = 1.2;
+        // controls.panSpeed = 0.8;
+        // controls.noZoom = false;
+        // controls.noPan = false;
+        // controls.staticMoving = true;
+        // controls.dynamicDampingFactor = 0.3;
+        // controls.keys = [65, 83, 68];
+        // controls.addEventListener('change', render);
 
         light = new THREE.DirectionalLight( 0xffffff );
         light.position.set( 0, 0, 1 );
@@ -216,7 +217,7 @@ for (var i=0; i&lt;coords.length; i++) {
 
       function animate() {
         requestAnimationFrame(animate);
-        controls.update();
+        // controls.update();
         render();
       }
 
@@ -232,6 +233,11 @@ for (var i=0; i&lt;coords.length; i++) {
         }
         var d = lsys_dir[lsys];
         var new_lsys = new LSystem(d[0], d[1], d[2]).iterate(d[3]).draw(d[4]);
+        $('#custom-axiom').val(d[0]);
+        $('#custom-rules').val(JSON.stringify(d[1]).replace(/\"/g, "'"));
+        $('#custom-draw-consts').val(JSON.stringify(d[2]).replace(/\"/g, "'"));
+        $('#custom-iterations').val(d[3]);
+        $('#custom-angle').val(Math.round(d[4] * 180 / Math.PI));
         draw_lsys(new_lsys);
         return false;
       });
@@ -239,13 +245,14 @@ for (var i=0; i&lt;coords.length; i++) {
       $('#custom-draw').click(function(e) {
         var axiom = $('#custom-axiom').val();
         var rules = eval('(' + $('#custom-rules').val() + ')');
+        var draw_consts = eval('(' + $('#custom-draw-consts').val() + ')');
         var iterations = $('#custom-iterations').val();
         var angle = $('#custom-angle').val();
 
         if (lsys_tree) {
           scene.remove(lsys_tree);
         }
-        var custom_lsys = new LSystem(axiom, rules).iterate(iterations).draw(angle * (Math.PI / 180));
+        var custom_lsys = new LSystem(axiom, rules, draw_consts).iterate(iterations).draw(angle * (Math.PI / 180));
         draw_lsys(custom_lsys);
         return false;
       });
