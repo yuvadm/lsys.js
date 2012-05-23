@@ -89,10 +89,12 @@ for (var i=0; i&lt;coords.length; i++) {
           <div class="span9">
             <div id="render-container"></div>
             <br/>
-            <form class="well form-inline">
-              <input type="text" class="input-small" placeholder="Axiom">
-              <input type="text" class="input-small" placeholder="Rules">
-              <button type="submit" class="btn">Draw</button>
+            <form id="custom-form" class="well form-inline">
+              <input id="custom-axiom" type="text" class="input-small" placeholder="Axiom">
+              <input id="custom-rules" type="text" class="input-large" placeholder="Rules">
+              <input id="custom-iterations" type="text" class="input-small" placeholder="Iterations">
+              <input id="custom-angle" type="text" class="input-small" placeholder="Angle">
+              <button id="custom-draw" type="submit" class="btn">Draw</button>
             </form>
           </div>
         </div>
@@ -223,6 +225,20 @@ for (var i=0; i&lt;coords.length; i++) {
           scene.remove(lsys_tree);
         }
         draw_lsys(lsys_dir[lsys]);
+        return false;
+      });
+
+      $('#custom-draw').click(function(e) {
+        var axiom = $('#custom-axiom').val();
+        var rules = eval('(' + $('#custom-rules').val() + ')');
+        var iterations = $('#custom-iterations').val();
+        var angle = $('#custom-angle').val();
+
+        if (lsys_tree) {
+          scene.remove(lsys_tree);
+        }
+        var custom_lsys = new LSystem(axiom, rules).iterate(iterations).draw(angle * (Math.PI / 180));
+        draw_lsys(custom_lsys);
         return false;
       });
 
