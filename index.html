@@ -188,9 +188,8 @@ for (var i=0; i&lt;coords.length; i++) {
 
       function draw_lsys(coords) {
         lsys_tree = new THREE.Object3D();
-        var g = new THREE.Geometry();
         for (var i=0; i<coords.length; i++) {
-          var branch = [];
+          var g = new THREE.Geometry();
           for (var j=0; j<coords[i].length; j++) {
             var v = new THREE.Vector3(coords[i][j][0], coords[i][j][1], coords[i][j][2]);
             g.vertices.push(v);
