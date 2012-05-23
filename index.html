@@ -115,7 +115,7 @@ for (var i=0; i&lt;coords.length; i++) {
       var HEIGHT = 300; //window.innerHeight;
 
       var container;
-      var scene, camera, renderer;
+      var scene, camera, controls, renderer;
       var lsys_tree, dim;
 
       var mouseX = 0, mouseY = 0;
@@ -130,9 +130,19 @@ for (var i=0; i&lt;coords.length; i++) {
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera(20, WIDTH / HEIGHT, 1, 10000);
-        //camera.position.y = 100;
-        camera.position.z = 100;
+        camera.position.z = 50;
         scene.add(camera);
+
+        controls = new THREE.TrackballControls(camera);
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+        controls.keys = [65, 83, 68];
+        controls.addEventListener('change', render);
 
         light = new THREE.DirectionalLight( 0xffffff );
         light.position.set( 0, 0, 1 );
@@ -206,14 +216,11 @@ for (var i=0; i&lt;coords.length; i++) {
 
       function animate() {
         requestAnimationFrame(animate);
+        controls.update();
         render();
       }
 
       function render() {
-        if (lsys_tree && dim == '3D') {
-          lsys_tree.rotation.y = mouseX % (20 * Math.PI) / 10;
-        }
-        camera.lookAt(scene.position);
         renderer.render(scene, camera);
       }
 
