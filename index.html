@@ -83,7 +83,12 @@ for (var i=0; i&lt;coords.length; i++) {
               <li><a href="#" class="lsys-link" data-lsys="koch_curve" data-dim="2D">Koch Curve</a></li>
               <li><a href="#" class="lsys-link" data-lsys="sierpinski" data-dim="2D">Sierpinski Triangle</a></li>
               <li><a href="#" class="lsys-link" data-lsys="dragon_curve" data-dim="2D">Dragon Curve</a></li>
+              <li><a href="#" class="lsys-link" data-lsys="hilbert_curve" data-dim="2D">Hilbert Curve</a></li>
               <li><a href="#" class="lsys-link" data-lsys="fractal_plant" data-dim="2D">Fractal Plant</a></li>
+              <li class="nav-header">3D Basics</li>
+              <li><a href="#" class="lsys-link" data-lsys="tree1" data-dim="3D">Tree 1</a></li>
+              <li><a href="#" class="lsys-link" data-lsys="3d_hilbert_curve" data-dim="3D">3D Hilbert Curve</a></li>
+              <li><a href="#" class="lsys-link" data-lsys="3d_axises" data-dim="3D">3D Axises</a></li>
             </ul>
           </div>
           <div class="span9">
@@ -109,7 +114,11 @@ for (var i=0; i&lt;coords.length; i++) {
         'koch_curve': ['F', {'F': 'F+F-F-F+F'}, [], 3, Math.PI/2],
         'sierpinski': ['A', {'A': 'B-A-B', 'B': 'A+B+A'}, ['A', 'B'], 4, Math.PI/3],
         'dragon_curve': ['FX', {'X': 'X+YF', 'Y': 'FX-Y'}, [], 10, Math.PI/2],
-        'fractal_plant': ['X', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, [], 6, Math.PI*25/180]
+        'hilbert_curve': ['A', {'A': '-BF+AFA+FB-', 'B': '+AF-BFB-FA+'}, [], 1, Math.PI/2],
+        'fractal_plant': ['X', {'X': 'F-[[X]+X]+F[+FX]-X', 'F': 'FF'}, [], 6, Math.PI*25/180],
+        'tree1': ['F', {'F': 'F[-&<F][<+&F]|F[-&>F][+&F]'}, [], 3, Math.PI*23/180],
+        '3d_hilbert_curve': ['X', {'X': '^<XF^<XFX-F^>>XFX&F+>>XFX-F>X->'}, [], 1, Math.PI/2],
+        '3d_axises': ['F', {'F': '[FF]++[FF]++[FF]++[FF]>>[FF]<<<<[FF]'}, [], 1, Math.PI/4],
       }
 
       var WIDTH = 500; //window.innerWidth;
@@ -134,16 +143,16 @@ for (var i=0; i&lt;coords.length; i++) {
         camera.position.z = 50;
         scene.add(camera);
 
-        // controls = new THREE.TrackballControls(camera);
-        // controls.rotateSpeed = 1.0;
-        // controls.zoomSpeed = 1.2;
-        // controls.panSpeed = 0.8;
-        // controls.noZoom = false;
-        // controls.noPan = false;
-        // controls.staticMoving = true;
-        // controls.dynamicDampingFactor = 0.3;
-        // controls.keys = [65, 83, 68];
-        // controls.addEventListener('change', render);
+        controls = new THREE.TrackballControls(camera);
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+        controls.keys = [65, 83, 68];
+        controls.addEventListener('change', render);
 
         light = new THREE.DirectionalLight( 0xffffff );
         light.position.set( 0, 0, 1 );
@@ -217,7 +226,7 @@ for (var i=0; i&lt;coords.length; i++) {
 
       function animate() {
         requestAnimationFrame(animate);
-        // controls.update();
+        controls.update();
         render();
       }
 
