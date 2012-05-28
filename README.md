@@ -32,3 +32,8 @@ Syntax
  - `<`/`>`: roll right / left
  - `|`: reverse vector direction
  - `[`/`]`: push / pop current tree state
+
+More
+----
+
+For more info and examples, check out http://yuvadm.github.com/lsys.js
