@@ -1,3 +1,9 @@
+/*
+ *  LSystems.JS v0.1
+ *  Copyright (c) 2012, Yuval Adam
+ *  http://yuvadm.github.com/lsys.js/LICENSE
+ */
+
 function LSystem(axiom, rules, draw_constants) {
   this.axiom = axiom;
   this.rules = rules;
