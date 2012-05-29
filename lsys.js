@@ -52,7 +52,6 @@ function LSystem(axiom, rules, draw_constants) {
           U -= alpha;
           RUu = true;
           break;
-
         case '&':
           L += alpha;
           RLu = true;
@@ -61,7 +60,6 @@ function LSystem(axiom, rules, draw_constants) {
           L -= alpha;
           RLu = true;
           break;
-
         case '<':
           H += alpha;
           RHu = true;
@@ -70,12 +68,10 @@ function LSystem(axiom, rules, draw_constants) {
           H -= alpha;
           RHu = true;
           break;
-
         case '|':
           U += Math.PI;
           RUu = true;
           break;
-        // push and pop branch
         case '[':
           stack.push(x, y, z, H, L, U, geometry);
           geometry = [[x,y,z]];
@@ -92,7 +88,6 @@ function LSystem(axiom, rules, draw_constants) {
           y = stack.pop();
           x = stack.pop();
           break;
-        // forward draw
         case 'F':
           nx = 0, ny = 1, nz = 0;
           nc = this.tree.charAt(i+1);
