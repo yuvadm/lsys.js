@@ -72,7 +72,7 @@ function LSystem(axiom, rules, draw_constants) {
           break;
 
         case '|':
-          U += Math.PI / 2;
+          U += Math.PI;
           RUu = true;
           break;
         // push and pop branch
