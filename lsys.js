@@ -10,6 +10,33 @@ function LSystem(axiom, rules, draw_constants) {
   this.tree = axiom;
   this.draw_constants = draw_constants || [];
 
+  this.cos = Math.cos;
+  this.sin = Math.sin;
+
+  this.R_U = function(a) {
+    return [
+      [cos(a),  sin(a), 0],
+      [-sin(a), cos(a), 0],
+      [0,       0,      1]
+    ];
+  };
+
+  this.R_L = function(a) {
+    return [
+      [cos(a), 0, -sin(a)],
+      [0,      1,       0],
+      [sin(a), 0,  cos(a)]
+    ];
+  };
+
+  this.R_H = function(a) {
+    return [
+      [1,      0,       0],
+      [0, cos(a), -sin(a)],
+      [0, sin(a),  cos(a)]
+    ];
+  };
+
   this.iterate = function(n) {
     for (var i=0; i<n; i++) {
       this.tree = this.tree.replace(/\w/g, function(c) {
