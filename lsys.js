@@ -37,6 +37,29 @@ function LSystem(axiom, rules, draw_constants) {
     ];
   };
 
+  this.matrix_mult = function(a, b) {
+    var ah = a.length, aw = a[0].length;
+    var bh = b.length, bw = b[0].length;
+    var res = [];
+
+    if (aw != bh) {
+      throw 'Dimension error';
+    }
+
+    for (var i=0; i<ah; i++) {
+      res[i] = [];
+      for (var j=0; j<bw; j++) {
+        var sum = 0;
+        for (var k=0; k<aw; k++) {
+          sum += a[i][k] * b[k][j];
+        }
+        res[i][j] = sum;
+      }
+    }
+
+    return res;
+  };
+
   this.iterate = function(n) {
     for (var i=0; i<n; i++) {
       this.tree = this.tree.replace(/\w/g, function(c) {
@@ -72,8 +95,7 @@ function LSystem(axiom, rules, draw_constants) {
       }
       switch(c) {
         case '+':
-          U += alpha;
-          RUu = true;
+
           break;
         case '-':
           U -= alpha;
