@@ -85,11 +85,12 @@ function LSystem(axiom, rules, draw_constants) {
     var x = 0, y = 0, z = 0; // cartesian coordinates
     var nx = 0, ny = 1, nz = 0; // next step delta
     
-    var H = [1,0,0];
-    var L = [0,1,0];
-    var U = [0,0,1];
+    var H = 0;
+    var L = 1;
+    var U = 0;
 
     for (var i=0; i<this.tree.length; i++) {
+      console.log(H, L, U);
       var c = this.tree.charAt(i);
 
       if (this.draw_constants.indexOf(c) != -1) {
@@ -98,32 +99,32 @@ function LSystem(axiom, rules, draw_constants) {
       var _HLU;
       switch(c) {
         case '+':
-          _HLU = this.matrix_mult([H,L,U], this.R_U(alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_U(alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '-':
-          _HLU = this.matrix_mult([H,L,U], this.R_U(-alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_U(-alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '&':
-          _HLU = this.matrix_mult([H,L,U], this.R_L(alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_L(alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '^':
-          _HLU = this.matrix_mult([H,L,U], this.R_L(-alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_L(-alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '<':
-          _HLU = this.matrix_mult([H,L,U], this.R_H(alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_H(alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '>':
-          _HLU = this.matrix_mult([H,L,U], this.R_H(-alpha));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_H(-alpha), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '|':
-          _HLU = this.matrix_mult([H,L,U], this.R_U(Math.PI));
-          H = _HLU[0], L = _HLU[1], U = _HLU[2];
+          _HLU = this.matrix_mult(this.R_U(Math.PI), [[H],[L],[U]]);
+          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
           break;
         case '[':
           stack.push(x, y, z, H, L, U, geometry);
@@ -145,9 +146,9 @@ function LSystem(axiom, rules, draw_constants) {
           nx = 0, ny = 1, nz = 0;
           nc = this.tree.charAt(i+1);
 
-          x += nx;
-          y += ny;
-          z += nz;
+          x += H;
+          y += L;
+          z += U;
           
           geometry.push([x,y,z]);
           break;
