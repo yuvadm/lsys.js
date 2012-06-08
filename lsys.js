@@ -83,14 +83,10 @@ function LSystem(axiom, rules, draw_constants) {
     var geometry = [[0,0,0]];
 
     var x = 0, y = 0, z = 0; // cartesian coordinates
-    var nx = 0, ny = 1, nz = 0; // next step delta
-    
-    var H = 0;
-    var L = 1;
-    var U = 0;
+    var H = 0, L = 1, U = 0; // next step vector [H,L,U]
 
     for (var i=0; i<this.tree.length; i++) {
-      console.log(H, L, U);
+      // console.log(H, L, U);
       var c = this.tree.charAt(i);
 
       if (this.draw_constants.indexOf(c) != -1) {
