@@ -4,6 +4,8 @@
  *  http://yuvadm.github.com/lsys.js/LICENSE
  */
 
+module.exports = LSystem
+
 function LSystem(axiom, rules, draw_constants) {
   this.axiom = axiom;
   this.rules = rules;
