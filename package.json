@@ -3,15 +3,12 @@
     "version": "0.1.1",
     "description": "3D L-Systems implementation in JavaScript.",
     "preferGlobal": "true",
-    "main": "index.js",
-    "bin": { "lsys": "index.js" },
+    "main": "lsys.js",
     "author": "",
     "keywords": ["lsystem", "fractal", "turtle"],
     "repository" : {
         "type": "git",
         "url": "https://github.com/tatarize/lsys.js.git"
-    },
-    "dependencies": {
     },
     "engines": { "node": "*" }
 }
