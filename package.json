@@ -2,7 +2,7 @@
     "name": "lsys",
     "version": "0.1.1",
     "description": "3D L-Systems implementation in JavaScript.",
-    "preferGlobal": "true",
+    "preferGlobal": "false",
     "main": "lsys.js",
     "author": "",
     "keywords": ["lsystem", "fractal", "turtle"],
