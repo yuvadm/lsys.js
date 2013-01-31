@@ -1,8 +1,8 @@
 L-Systems.JS
 ============
 
-A complete, 3D L-Systems implementation in JavaScript. Generates trees by
-production rules and draws by converting to cartesian coordinates.
+A complete, L-Systems implementation in JavaScript. Generates trees by
+production rules.
 
 Usage
 -----
