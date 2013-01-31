@@ -8,30 +8,39 @@ Usage
 -----
 
 ```js
-var lsys = new LSystem('F', { 'F' : 'F-F+FF' }).iterate(2);
-var tree = lsys.print();
-console.log(tree);  // F-F+FF-F-F+FF+F-F+FFF-F+FF
-var coords = lsys.draw(Math.PI / 2);  // draw tree with alpha as 90 degrees
-console.log(coords);  // [[0,0,0], [0,1,0], [1,1,0], ...
+    var fractal = require('lsys');
+    var lsystem = fractal("L", {
+        "L": "L+R++R-L--LL-R+", 
+        "R": "-L+RR++R+L--L-R"
+    }).iterate(2).apply({"L": "F","R": "F"}); 
 ```
+
+Calls the api with an initial axiom: "L"
+And,
+Rules to rewrite any "L" as "L+R++R-L--LL-R+" and any "R" as "-L+RR++R+L--L-R"
+
+Calls iterate(2) which applies these rules twice.
+
+Calls apply with a different set of rules to replace any L and any R with F, as a finalization step.
+
+This creates a Gosper Flowsnake fractal.
+
 
 Definition
 ------
 
 An L-system is a formal grammar defined as an initial axiom string, and a set
-of production rules. In the aforementioned example, `F` is the initial axiom,
-and only one production rule exists: `F -> F-F+FF`. The grammar alphabet is
-assumed to be all characters with a production rule mapping.
+of production rules.
 
-Syntax
-------
 
- - `F`: draw and move one unit vector forward
- - `+`/`-`: turn right / left
- - `&`/`^`: pitch up / down
- - `<`/`>`: roll right / left
- - `|`: reverse vector direction
- - `[`/`]`: push / pop current tree state
+Usage
+-----
+
+Lsystem grammars are typically used as input for Turtle Graphics.
+
+        var turtle = require('turtle3d');
+        var coords = turtle(lsystem.string(), 60 * (Math.PI / 180));
+
 
 More
 ----
