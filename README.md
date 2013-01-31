@@ -42,7 +42,17 @@ Lsystem grammars are typically used as input for Turtle Graphics.
         var coords = turtle(lsystem.string(), 60 * (Math.PI / 180));
 
 
+# install
+
+With [npm](https://npmjs.org) do:
+
+```
+npm install lsys
+```
+
+
 More
 ----
 
 For more info and examples, check out http://yuvadm.github.com/lsys.js
+
