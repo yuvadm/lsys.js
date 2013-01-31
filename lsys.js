@@ -13,30 +13,43 @@ function LSystem(axiom, rules, draw_constants) {
   var cos = Math.cos;
   var sin = Math.sin;
 
-  this.R_U = function(a) {
-    return [
-      [cos(a),  sin(a), 0],
-      [-sin(a), cos(a), 0],
-      [0,       0,      1]
-    ];
-  };
-
-  this.R_L = function(a) {
-    return [
-      [cos(a), 0, -sin(a)],
-      [0,      1,       0],
-      [sin(a), 0,  cos(a)]
-    ];
-  };
-
-  this.R_H = function(a) {
-    return [
-      [1,      0,       0],
-      [0, cos(a), -sin(a)],
-      [0, sin(a),  cos(a)]
-    ];
-  };
-
+        function rotAxis(angle, vector )
+        {
+            var M = [];
+            M[0] = [];
+            M[1] = [];
+            M[2] = [];
+            M[3] = [];
+            var axisX = vector[0][0];
+            var axisY = vector[1][0];
+            var axisZ = vector[2][0];
+            
+            var sine = cos(angle);
+            var cosign = sin(angle);
+            
+            M[0][0] = ( sine + ( ( axisX * axisX ) * ( 1 - sine ) ) );
+            M[0][1] = ( ( ( axisX * axisY ) * ( 1 - sine ) ) - ( axisZ * cosign ) );
+            M[0][2] = ( ( ( axisX * axisZ ) * ( 1 - sine ) ) + ( axisY * cosign ) );
+            M[0][3] = 0;
+            
+            M[1][0] = ( ( ( axisX * axisY ) * ( 1 - sine ) ) + ( axisZ * cosign ) );
+            M[1][1] = ( sine + ( ( axisY * axisY ) * ( 1 - sine ) ) );
+            M[1][2] = ( ( ( axisY * axisZ ) * ( 1 - sine ) ) - ( axisX * cosign ) );
+            M[1][3] = 0;
+            
+            M[2][0] = ( ( ( axisX * axisZ ) * ( 1 - sine ) ) - ( axisY * cosign ) );
+            M[2][1] = ( ( ( axisY * axisZ ) * ( 1 - sine ) ) + ( axisX * cosign ) );
+            M[2][2] = ( sine + ( ( axisZ * axisZ ) * ( 1 - sine ) ) );
+            M[2][3] = 0;
+            
+            M[3][0] = 0;
+            M[3][1] = 0;
+            M[3][2] = 0;
+            M[3][3] = 1;
+            
+            return M;
+        }
+        
   this.matrix_mult = function(a, b) {
     var ah = a.length, aw = a[0].length;
     var bh = b.length, bw = b[0].length;
@@ -83,7 +96,10 @@ function LSystem(axiom, rules, draw_constants) {
     var geometry = [[0,0,0]];
 
     var x = 0, y = 0, z = 0; // cartesian coordinates
-    var H = 0, L = 1, U = 0; // next step vector [H,L,U]
+
+    var H = [[1],[0],[0],[0]]; //column base.
+    var L = [[0],[1],[0],[0]];
+    var U = [[0],[0],[1],[0]]; //H x L -> U
 
     for (var i=0; i<this.tree.length; i++) {
       // console.log(H, L, U);
@@ -92,35 +108,50 @@ function LSystem(axiom, rules, draw_constants) {
       if (this.draw_constants.indexOf(c) != -1) {
         c = 'F';
       }
-      var _HLU;
+
       switch(c) {
         case '+':
-          _HLU = this.matrix_mult(this.R_U(alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(alpha,U);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
           break;
         case '-':
-          _HLU = this.matrix_mult(this.R_U(-alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(-alpha,U);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
           break;
         case '&':
-          _HLU = this.matrix_mult(this.R_L(alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(alpha,L);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
           break;
         case '^':
-          _HLU = this.matrix_mult(this.R_L(-alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
-          break;
-        case '<':
-          _HLU = this.matrix_mult(this.R_H(alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(-alpha,L);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
+            
           break;
         case '>':
-          _HLU = this.matrix_mult(this.R_H(-alpha), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(alpha,H);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
+          break;
+        case '<':
+            R = rotAxis(-alpha,H);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
           break;
         case '|':
-          _HLU = this.matrix_mult(this.R_U(Math.PI), [[H],[L],[U]]);
-          H = _HLU[0][0], L = _HLU[1][0], U = _HLU[2][0];
+            R = rotAxis(Math.PI,U);
+            H = this.matrix_mult(R,H);
+            L = this.matrix_mult(R,L);
+            U = this.matrix_mult(R,U);
           break;
         case '[':
           stack.push(x, y, z, H, L, U, geometry);
@@ -139,12 +170,9 @@ function LSystem(axiom, rules, draw_constants) {
           x = stack.pop();
           break;
         case 'F':
-          nx = 0, ny = 1, nz = 0;
-          nc = this.tree.charAt(i+1);
-
-          x += H;
-          y += L;
-          z += U;
+          x += H[0][0];
+          y += H[1][0];
+          z += H[2][0];
           
           geometry.push([x,y,z]);
           break;
