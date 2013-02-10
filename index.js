@@ -18,9 +18,10 @@ module.exports = function(axiom,rules) {
             r = rules;
         }
         this.tree = this.tree.replace(/\w/g, function(c) {
+		if (r["p"+c]) if (Math.random() > r["p"+c]) return "";
             return r[c] || c;
         });
-     return this;
+	   return this;
     }
     this.reset = function() {
         this.tree = axiom;

@@ -37,3 +37,11 @@ More
 ----
 
 For more info and examples, check out http://yuvadm.github.com/lsys.js
+
+
+Typical Usage
+----
+
+For using such a system in a Turtle also download:
+http://github.com/tatarize/turtle3d
+
